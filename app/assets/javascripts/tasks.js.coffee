@@ -2,6 +2,9 @@ $ ->
 
   $('[data-toggle="tooltip"]').tooltip()
 
+  # Hiding of optional table columns for index page
+  $('#task-list').bootstrapTable('hideColumn', 'organizations')
+
   $(document).on 'click', 'table.tasks tbody td:not(td.complete, td.reschedule)', ->
     row_id  = $(this).parents("tr").attr("data-index")
     task_id = $(this).parents("table").bootstrapTable("getData")[row_id].id

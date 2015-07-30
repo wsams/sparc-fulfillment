@@ -301,6 +301,7 @@ en:
     create_task: "Create Task"
     all_tasks: "Show All Tasks"
     object: "Task"
+    organizations: "Provider/Program/Core"
     flash_messages:
       updated: "Task Updated"
       created: "Task Created"

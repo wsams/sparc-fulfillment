@@ -21,4 +21,12 @@ module TaskHelper
 
     task_type
   end
+
+  def format_task_organizations(task)
+    task_type = task.assignable_type
+    if task_type == 'Procedure'
+      procedure = Procedure.find(task.assignable_id)
+      procedure.protocol.sub_service_request.org_tree_display
+    end
+  end
 end

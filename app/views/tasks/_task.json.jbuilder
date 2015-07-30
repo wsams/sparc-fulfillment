@@ -8,3 +8,4 @@ json.body task.body
 json.due_at format_date(task.due_at)
 json.reschedule format_reschedule(task.id)
 json.assignable_type format_task_type(task)
+json.organizations format_task_organizations(task)
