@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+ruby '2.2.3'
+
 gem 'omniauth-shibboleth'
 gem 'activerecord-import'
 gem 'acts_as_list'
@@ -30,7 +32,7 @@ gem 'paper_trail', '~> 4.0.0.beta'
 gem 'paranoia', '~> 2.0'
 gem 'progress_bar'
 gem 'puma'
-gem 'rails', '4.2.2'
+gem 'rails', '4.2.4'
 gem 'remotipart'
 gem 'rest-client'
 gem 'sass-rails'
