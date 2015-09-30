@@ -19,8 +19,10 @@ class StudyScheduleController < ApplicationController
   end
 
   def check_row
-    qty = params[:check] == 'true' ? 1 : 0
-    visits = Visit.where(line_item_id: params[:line_item_id])
+    @check = params[:check]
+    @line_item_id = params[:line_item_id]
+    qty = (@check == 'true' ? 1 : 0)
+    visits = Visit.where(line_item_id: @line_item_id)
     visits.update_all(research_billing_qty: qty, insurance_billing_qty: 0, effort_billing_qty: 0)
     visits.each do |visit|
       visit.update_procedures qty.to_i, 'research_billing_qty'
@@ -29,8 +31,10 @@ class StudyScheduleController < ApplicationController
   end
 
   def check_column
-    qty = params[:check] == 'true' ? 1 : 0
-    visits = Visit.where(visit_group_id: params[:visit_group_id])
+    @check = params[:check]
+    @visit_group_id = params[:visit_group_id]
+    qty = (@check == 'true' ? 1 : 0)
+    visits = Visit.where(visit_group_id: @visit_group_id)
     visits.update_all(research_billing_qty: qty, insurance_billing_qty: 0, effort_billing_qty: 0)
     visits.each do |visit|
       visit.update_procedures qty.to_i, 'research_billing_qty'
