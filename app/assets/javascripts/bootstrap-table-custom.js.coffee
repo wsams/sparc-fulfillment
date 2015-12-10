@@ -16,3 +16,8 @@
 
 pastDueDateCleaner = (a) ->
   return a.replace(" - PAST DUE", "").replace("<span class=\"overdue-task\">", "").replace("</span>", "")
+
+$ ->
+  $("#protocol-list").bootstrapTable 'refreshOptions',
+    exportOptions:
+      fileName: 'protocol_index'
