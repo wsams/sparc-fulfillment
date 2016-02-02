@@ -3,3 +3,4 @@ $("#modal_place").modal('show')
 $('#start_date').datetimepicker(format: 'MM-DD-YYYY')
 $('#end_date').datetimepicker(format: 'MM-DD-YYYY')
 $(".modal-content .selectpicker").selectpicker()
+
