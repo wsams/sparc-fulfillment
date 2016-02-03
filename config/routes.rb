@@ -15,7 +15,11 @@ Rails.application.routes.draw do
   resources :documents
   resources :line_items
   resources :visits, only: [:update]
-  resources :reports, only: [:new, :create]
+  resources :reports, only: [:new, :create] do
+    collection do
+      get 'update_providers'
+    end
+  end
   resources :custom_appointments, controller: :appointments
 
   resources :arms, only: [:new, :create, :update, :destroy] do

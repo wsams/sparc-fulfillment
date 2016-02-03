@@ -5,6 +5,8 @@ class ReportsController < ApplicationController
 
   def new
     @title = @report_type.titleize
+    @institutions = Organization.where(type: "Institution")
+    @providers = Organization.where(type: "Provider")
   end
 
   def create
@@ -19,6 +21,13 @@ class ReportsController < ApplicationController
       ReportJob.perform_later(@document, reports_params)
     end
   end
+
+  def update_providers
+    binding.pry
+    institution = Institution.find(params[:institution_id])
+    @providers = Provider.where(parent_id: institution).map{|provider| [provider.name, provider.id]}.insert(0, "Select a Provider")
+  end
+  
 
   private
 

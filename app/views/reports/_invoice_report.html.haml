@@ -26,11 +26,11 @@
             .form-group
               = label_tag "institution", t(:reports)[:institution], class: "col-sm-3 control-label"
               .col-sm-9
-                = select_tag "institution", options_from_collection_for_select(Institution.all, "id", "name"), multiple: true, 'data-live-search' => true, class: "selectpicker form-control"
-            .form-group
+                = select_tag "institution", options_from_collection_for_select(@institutions, "id", "name"), multiple: true, 'data-live-search' => true, class: "selectpicker form-control", id: "institution_select"
+            .form-group{display:'none'}
               = label_tag "provider", t(:reports)[:provider], class: "col-sm-3 control-label"
               .col-sm-9
-                = select_tag "provider", grouped_collection_select :providers, Institution.all, :providers, :name, :id, :name, include_blank: true
+                = select_tag "provider", options_from_collection_for_select(@providers, "id", "name"), multiple: true, 'data-live-search' => true, class: "selectpicker form-control", id: "provider_select"
             .form-group
               = label_tag "protocol", t(:reports)[:protocols], class: "col-sm-3 control-label"
               .col-sm-9
@@ -42,6 +42,6 @@
           %button.btn.btn-default{type: 'button', data: {dismiss: 'modal'}}= t(:actions)[:close]
           %input.btn.btn-primary{type: 'submit', value: t(:reports)[:request_report]}
 
-          Institution.all
-          org = Organization.find_by name: "Medical University of South Carolina"
-          Provider.where(parent_id: org.id).find_each do |provider|
+          / Institution.all
+          / org = Organization.find_by name: "Medical University of South Carolina"
+          / Provider.where(parent_id: org.id).find_each do |provider|
