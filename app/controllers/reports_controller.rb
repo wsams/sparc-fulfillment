@@ -7,6 +7,7 @@ class ReportsController < ApplicationController
     @title = @report_type.titleize
     @institutions = Organization.where(type: "Institution")
     @providers = Organization.where(type: "Provider")
+    @programs = Organization.where(type: "Program")
   end
 
   def create
@@ -23,9 +24,15 @@ class ReportsController < ApplicationController
   end
 
   def update_providers
-    binding.pry
-    institution = Institution.find(params[:institution_id])
-    @providers = Provider.where(parent_id: institution).map{|provider| [provider.name, provider.id]}.insert(0, "Select a Provider")
+    institution_id = (params[:institution_id]).first().to_i
+    @providers = Organization.where(type: "Provider").where(parent_id: institution_id).map{|provider| [provider.name, provider.id]}.insert(0, "Select a Provider")
+    render 'new'
+  end
+
+  def update_programs
+    provider_id = (params[:provider_id]).first().to_i
+    @programs = Organization.where(type: "Program").where(parent_id: provider_id).map{|program| [program.name, program.id]}.insert(0, "Select a Program")
+    render 'new'
   end
   
 

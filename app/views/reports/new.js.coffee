@@ -6,8 +6,19 @@ $(".modal-content .selectpicker").selectpicker()
 
 $ ->
 
-$(document).on 'change', '#institution_select', ->
-	$.ajax
-		url: "#{update_providers_reports_path}"
-		data: institution_id: $('#institution_select').val()
-		dataType: "script"
+	$('#institution_select').on 'change', ->
+		console.log("institution selected")
+		data = {institution_id: $('#institution_select').val()}
+		console.log(data)
+		$.ajax
+			url: '/reports/update_providers'
+			data: data
+			dataType: "script"
+
+	$(document).on 'change', '#provider_select', ->
+		data = {provider_id: $('#provider_select').val()}
+		console.log(data)
+		$.ajax
+			url: '/reports/update_programs'
+			data: data
+			dataType: "script"

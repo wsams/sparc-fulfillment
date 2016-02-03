@@ -26,11 +26,15 @@
             .form-group
               = label_tag "institution", t(:reports)[:institution], class: "col-sm-3 control-label"
               .col-sm-9
-                = select_tag "institution", options_from_collection_for_select(@institutions, "id", "name"), multiple: true, 'data-live-search' => true, class: "selectpicker form-control", id: "institution_select"
-            .form-group{display:'none'}
+                = select_tag "institution", options_from_collection_for_select(@institutions, "id", "name"), include_blank: "Select An Institution", 'data-live-search' => true, class: "selectpicker form-control", id: "institution_select"
+            .form-group
               = label_tag "provider", t(:reports)[:provider], class: "col-sm-3 control-label"
               .col-sm-9
-                = select_tag "provider", options_from_collection_for_select(@providers, "id", "name"), multiple: true, 'data-live-search' => true, class: "selectpicker form-control", id: "provider_select"
+                = select_tag "provider", options_from_collection_for_select(@providers, "id", "name"), include_blank: "Select A Provider", 'data-live-search' => true, class: "selectpicker form-control", id: "provider_select"
+            .form-group
+              = label_tag "program", t(:reports)[:program], class: "col-sm-3 control-label"
+              .col-sm-9
+                = select_tag "program", options_from_collection_for_select(@programs, "id", "name"), include_blank: "Select A Program", 'data-live-search' => true, class: "selectpicker form-control", id: "program_select"
             .form-group
               = label_tag "protocol", t(:reports)[:protocols], class: "col-sm-3 control-label"
               .col-sm-9

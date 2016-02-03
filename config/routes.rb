@@ -15,13 +15,15 @@ Rails.application.routes.draw do
   resources :documents
   resources :line_items
   resources :visits, only: [:update]
+  resources :custom_appointments, controller: :appointments
+
   resources :reports, only: [:new, :create] do
     collection do
       get 'update_providers'
+      get 'update_programs'
     end
   end
-  resources :custom_appointments, controller: :appointments
-
+  
   resources :arms, only: [:new, :create, :update, :destroy] do
     collection do
       get 'navigate', to: "arms#navigate_to_arm"
