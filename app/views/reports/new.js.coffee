@@ -4,21 +4,28 @@ $('#start_date').datetimepicker(format: 'MM-DD-YYYY')
 $('#end_date').datetimepicker(format: 'MM-DD-YYYY')
 $(".modal-content .selectpicker").selectpicker()
 
-$ ->
+# $ ->
+# 	$('#institution_select').on 'change', ->
+# 		institution_id = $(this).val()
+# 		console.log($("#provider_select").data('providers'))
+# 		$('#provider_select').closest('.form-group').show()
+	# $('#institution_select').on 'change', ->
+	# 	console.log("institution selected")
+	# 	data = {institution_id: $('#institution_select').val()}
+	# 	console.log(data)
+	# 	$.ajax
+	# 		type: 'PUT'
+	# 		url: '/reports/update_providers'
+	# 		data: data
+	# 		dataType: "script"
+	# 	console.log()
 
-	$('#institution_select').on 'change', ->
-		console.log("institution selected")
-		data = {institution_id: $('#institution_select').val()}
-		console.log(data)
-		$.ajax
-			url: '/reports/update_providers'
-			data: data
-			dataType: "script"
+	# $('#provider_select').on 'change', ->
+	# 	console.log("provider selected")
+	# 	data = {provider_id: $('#provider_select').val()}
+	# 	console.log(data)
+	# 	$.ajax
+	# 		url: '/reports/update_programs'
+	# 		data: data
+	# 		dataType: "script"
 
-	$(document).on 'change', '#provider_select', ->
-		data = {provider_id: $('#provider_select').val()}
-		console.log(data)
-		$.ajax
-			url: '/reports/update_programs'
-			data: data
-			dataType: "script"

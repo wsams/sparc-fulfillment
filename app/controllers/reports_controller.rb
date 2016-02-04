@@ -24,15 +24,19 @@ class ReportsController < ApplicationController
   end
 
   def update_providers
-    institution_id = (params[:institution_id]).first().to_i
-    @providers = Organization.where(type: "Provider").where(parent_id: institution_id).map{|provider| [provider.name, provider.id]}.insert(0, "Select a Provider")
-    render 'new'
+    puts "update_providers"
+    institution_id = (params[:institution_id]).to_i
+    puts institution_id.inspect()
+    @providers = Organization.where(type: "Provider").where(parent_id: institution_id).map{|provider| [provider.name, provider.id]}
+    puts @providers.inspect()
+
   end
 
   def update_programs
-    provider_id = (params[:provider_id]).first().to_i
-    @programs = Organization.where(type: "Program").where(parent_id: provider_id).map{|program| [program.name, program.id]}.insert(0, "Select a Program")
-    render 'new'
+    puts "update_programs"
+    provider_id = (params[:provider_id]).to_i
+    @programs = Organization.where(type: "Program").where(parent_id: provider_id).map{|program| [program.name, program.id]}
+    puts @programs.inspect()
   end
   
 
