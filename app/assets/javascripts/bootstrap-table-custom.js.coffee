@@ -16,3 +16,14 @@
 
 pastDueDateCleaner = (a) ->
   return a.replace(" - PAST DUE", "").replace("<span class=\"overdue-task\">", "").replace("</span>", "")
+
+$ ->
+  $("#protocol-list").bootstrapTable 'refreshOptions',
+    exportOptions:
+      fileName: 'protocol_index'
+
+  $("#study-level-activities-table").bootstrapTable 'refreshOptions',
+    exportOptions:
+      fileName: 'study_level_activities'
+      ignoreColumn: [0,10]
+
