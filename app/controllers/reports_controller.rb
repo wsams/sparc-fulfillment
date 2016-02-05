@@ -6,8 +6,8 @@ class ReportsController < ApplicationController
   def new
     @title = @report_type.titleize
     @institutions = Organization.where(type: "Institution")
-    @providers = Organization.where(type: "Provider")
-    @programs = Organization.where(type: "Program")
+    # @providers = Organization.where(type: "Provider").limit(2)
+    # @programs = Organization.where(type: "Program").limit(2)
   end
 
   def create
@@ -27,7 +27,7 @@ class ReportsController < ApplicationController
     puts "update_providers"
     institution_id = (params[:institution_id]).to_i
     puts institution_id.inspect()
-    @providers = Organization.where(type: "Provider").where(parent_id: institution_id).map{|provider| [provider.name, provider.id]}
+    @providers = Organization.where(type: "Provider").where(parent_id: institution_id)
     puts @providers.inspect()
 
   end
@@ -35,8 +35,15 @@ class ReportsController < ApplicationController
   def update_programs
     puts "update_programs"
     provider_id = (params[:provider_id]).to_i
-    @programs = Organization.where(type: "Program").where(parent_id: provider_id).map{|program| [program.name, program.id]}
+    @programs = Organization.where(type: "Program").where(parent_id: provider_id)
     puts @programs.inspect()
+  end
+
+  def update_cores
+    puts "update_cores"
+    program_id = (params[:program_id]).to_i
+    @cores = Organization.where(type: "Core").where(parent_id: program_id)
+    puts @cores.inspect()
   end
   
 

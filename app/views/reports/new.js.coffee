@@ -4,11 +4,30 @@ $('#start_date').datetimepicker(format: 'MM-DD-YYYY')
 $('#end_date').datetimepicker(format: 'MM-DD-YYYY')
 $(".modal-content .selectpicker").selectpicker()
 
-# $ ->
-# 	$('#institution_select').on 'change', ->
-# 		institution_id = $(this).val()
-# 		console.log($("#provider_select").data('providers'))
-# 		$('#provider_select').closest('.form-group').show()
+$ ->
+	$('#institution_select').on 'change', ->
+		console.log("institution selected")
+		data = {institution_id: $('#institution_select').val()}
+		$.ajax
+			url: '/reports/update_providers'
+			data: data
+			dataType: "script"
+			
+	$('#provider_section').on 'change', ->
+		console.log("provider selected")
+		data = {provider_id: $('#provider_select').val()}
+		$.ajax
+			url: '/reports/update_programs'
+			data: data
+			dataType: "script"
+	$('#program_section').on 'change', ->
+		console.log("program selected")
+		data = {program_id: $('#program_select').val()}
+		$.ajax
+			url: '/reports/update_cores'
+			data: data
+			dataType: "script"
+
 	# $('#institution_select').on 'change', ->
 	# 	console.log("institution selected")
 	# 	data = {institution_id: $('#institution_select').val()}

@@ -1,4 +1,5 @@
 :plain
 	console.log("UPDATE PROGRAMS");
-	$('#program_select').html("<%= escape_javascript(options_from_collection_for_select(@programs, "id", "name"), include_blank: "Select A Program", 'data-live-search' => true, class: "selectpicker form-control") %>");
-	$('#program_select').closest('.form-group').show();
+	$('#program_section').html("#{escape_javascript(select_tag "program",options_from_collection_for_select(@programs, "id", "name"), include_blank: "Select A Program", 'data-live-search' => true, class: "selectpicker form-control", id: "program_select")}");
+	$('.selectpicker').selectpicker('refresh');
+	$('#program_section').closest('.form-group').show();

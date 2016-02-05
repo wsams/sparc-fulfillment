@@ -1,0 +1,5 @@
+:plain
+	console.log("UPDATE cores");
+	$('#core_section').html("#{escape_javascript(select_tag "core",options_from_collection_for_select(@cores, "id", "name"), include_blank: "Select A Core", 'data-live-search' => true, class: "selectpicker form-control", id: "core_select")}");
+	$('.selectpicker').selectpicker('refresh');
+	$('#core_section').closest('.form-group').show();
