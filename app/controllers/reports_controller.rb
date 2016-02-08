@@ -4,8 +4,10 @@ class ReportsController < ApplicationController
   before_action :find_report_type, only: [:new, :create]
 
   def new
+
     @title = @report_type.titleize
-    @institutions = Organization.where(type: "Institution")
+    @institutions = current_identity.clinical_provider_organizations.where(type: "Institution")
+    # @institutions = Organization.where(type: "Institution")
     # @providers = Organization.where(type: "Provider").limit(2)
     # @programs = Organization.where(type: "Program").limit(2)
   end

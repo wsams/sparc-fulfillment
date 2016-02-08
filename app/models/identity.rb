@@ -34,7 +34,7 @@ class Identity < ActiveRecord::Base
     IdentityCounter.find_or_create_by(identity: self)
   end
 
-  # counter should be a symbol like :tasks for tasks_counter
+  # counter should be a symbol like :tasks for tasks_counterqq
   def update_counter(counter, amount)
     IdentityCounter.update_counter(self.id, counter, amount)
   end
