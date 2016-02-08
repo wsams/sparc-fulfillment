@@ -35,6 +35,9 @@
               = label_tag "program", t(:reports)[:program], class: "col-sm-3 control-label"
               .col-sm-9#program_section
             /     = select_tag "program", options_from_collection_for_select(@programs, "id", "name"), include_blank: "Select A Program", 'data-live-search' => true, class: "selectpicker form-control", id: "program_select"
+            .form-group{style: 'display:none'}
+              = label_tag "core", t(:reports)[:core], class: "col-sm-3 control-label"
+              .col-sm-9#core_section
             .form-group
               = label_tag "protocol", t(:reports)[:protocols], class: "col-sm-3 control-label"
               .col-sm-9

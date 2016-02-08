@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     collection do
       get 'update_providers'
       get 'update_programs'
+      get 'update_cores'
     end
   end
   

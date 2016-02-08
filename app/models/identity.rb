@@ -42,7 +42,7 @@ class Identity < ActiveRecord::Base
   def full_name
     [first_name, last_name].join(' ')
   end
-
+  # identity.protocols == idenitty. clinical_provider_organizations.map protocols
   def clinical_provider_organizations
     orgs = []
 
