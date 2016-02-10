@@ -1,6 +1,0 @@
-:plain
-	console.log("UPDATE PROviders");
-	$('#provider_section').closest('.form-group').show();
-	$('#provider_section').html("#{escape_javascript(select_tag "provider",options_from_collection_for_select(@providers, "id", "name"), include_blank: "Select A Provider", 'data-live-search' => true, class: "selectpicker form-control", id: "provider_select")}").selectpicker('refresh');
-	$('.selectpicker').selectpicker('refresh');
-	

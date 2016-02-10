@@ -6,10 +6,8 @@ class ReportsController < ApplicationController
   def new
 
     @title = @report_type.titleize
-    @institutions = current_identity.clinical_provider_organizations.where(type: "Institution")
-    # @institutions = Organization.where(type: "Institution")
-    # @providers = Organization.where(type: "Provider").limit(2)
-    # @programs = Organization.where(type: "Program").limit(2)
+    @institutions = current_identity.organization_lookup("Institution")
+    @protocols = current_identity.protocols
   end
 
   def create
@@ -25,29 +23,12 @@ class ReportsController < ApplicationController
     end
   end
 
-  def update_providers
-    puts "update_providers"
-    institution_id = (params[:institution_id]).to_i
-    puts institution_id.inspect()
-    @providers = Organization.where(type: "Provider").where(parent_id: institution_id)
-    puts @providers.inspect()
+  def update_dropdown
+    @org_type = params[:org_type]
+    @organizations = current_identity.organization_lookup(@org_type)
 
+    @protocols = @organizations.map(&:protocols).to_a.select{|x| !x.empty?}
   end
-
-  def update_programs
-    puts "update_programs"
-    provider_id = (params[:provider_id]).to_i
-    @programs = Organization.where(type: "Program").where(parent_id: provider_id)
-    puts @programs.inspect()
-  end
-
-  def update_cores
-    puts "update_cores"
-    program_id = (params[:program_id]).to_i
-    @cores = Organization.where(type: "Core").where(parent_id: program_id)
-    puts @cores.inspect()
-  end
-  
 
   private
 

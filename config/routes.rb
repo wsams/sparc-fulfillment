@@ -19,9 +19,7 @@ Rails.application.routes.draw do
 
   resources :reports, only: [:new, :create] do
     collection do
-      get 'update_providers'
-      get 'update_programs'
-      get 'update_cores'
+      get 'update_dropdown'
     end
   end
   

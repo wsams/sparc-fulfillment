@@ -37,6 +37,16 @@ class Organization < ActiveRecord::Base
       sort_by(&:name)
   end
 
+  def parents
+    parents = []
+    if parent
+      parents << parent
+      parents.concat(parent.parents)
+    end
+
+    parents
+  end
+
   def all_child_organizations
     [
       non_process_ssrs_children,

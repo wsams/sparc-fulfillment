@@ -16,11 +16,15 @@ class Identity < ActiveRecord::Base
   delegate :tasks_count, :unaccessed_documents_count, to: :identity_counter
 
   def protocols
+    protocols = []
     if clinical_providers.any?
-      clinical_providers.
-        map { |clinical_provider| clinical_provider.organization.protocols }.
-        compact.
-        flatten
+      organizations = clinical_provider_organizations
+      organizations.each do |organization|
+        if organization.protocols.any?
+          protocols << organization.protocols 
+        end
+      end
+      return protocols.flatten.uniq
     else
       Array.new
     end
@@ -34,7 +38,7 @@ class Identity < ActiveRecord::Base
     IdentityCounter.find_or_create_by(identity: self)
   end
 
-  # counter should be a symbol like :tasks for tasks_counterqq
+  # counter should be a symbol like :tasks for tasks_counter
   def update_counter(counter, amount)
     IdentityCounter.update_counter(self.id, counter, amount)
   end
@@ -42,7 +46,15 @@ class Identity < ActiveRecord::Base
   def full_name
     [first_name, last_name].join(' ')
   end
-  # identity.protocols == idenitty. clinical_provider_organizations.map protocols
+
+  def organization_lookup(org_type="Institution")
+    orgs = []
+    clinical_provider_organizations.each do |cpo|
+      orgs << cpo.parents.select{|org| org.type == org_type}
+    end
+    orgs.flatten.uniq
+  end
+
   def clinical_provider_organizations
     orgs = []
 
