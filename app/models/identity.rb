@@ -30,6 +30,31 @@ class Identity < ActiveRecord::Base
     end
   end
 
+  def filtered_protocols(organization_type, organization_id)
+    protocols = []
+    if clinical_providers.any?
+      organizations = clinical_provider_organizations
+      organizations.each do |organization|
+        case organization_filtering_by
+          when "Provider"
+            if organization.type == "Provider" || organization.type == "Program" || organization.type == "Core"
+              protocols << organization.protocols
+            end
+          when "Program"
+            if organization.type == "Program" || organization.type == "Core"
+              protocols << organization.protocols
+            end
+          when "Core"
+            if organization.type == "Core"
+              protocols << organization.protocols
+            end
+        end
+      end
+    end
+    return protocols.flatten.uniq
+  end
+
+
   def readonly?
     false
   end
@@ -59,6 +84,7 @@ class Identity < ActiveRecord::Base
     orgs = []
 
     self.clinical_providers.map(&:organization).each do |org|
+      orgs << org.parents
       orgs << org
       orgs << org.all_child_organizations
     end

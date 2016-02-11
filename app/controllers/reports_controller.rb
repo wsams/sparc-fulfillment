@@ -25,9 +25,11 @@ class ReportsController < ApplicationController
 
   def update_dropdown
     @org_type = params[:org_type]
+    puts "****"
+    puts @org_type
     @organizations = current_identity.organization_lookup(@org_type)
-
-    @protocols = @organizations.map(&:protocols).to_a.select{|x| !x.empty?}
+    @protocols = current_identity.filtered_protocols(@org_type).flatten
+    # @protocols = @organizations.map(&:protocols).select{|x| !x.empty?}.flatten
   end
 
   private
