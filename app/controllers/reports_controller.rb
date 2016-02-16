@@ -25,14 +25,20 @@ class ReportsController < ApplicationController
 
   def update_dropdown
     @org_type = params[:org_type]
-    puts "****"
-    puts @org_type
+    @org_id = params[:org_id]
     @organizations = current_identity.organization_lookup(@org_type)
-    @protocols = current_identity.filtered_protocols(@org_type).flatten
-    # @protocols = @organizations.map(&:protocols).select{|x| !x.empty?}.flatten
+    @protocols = find_protocols(@org_id, @org_type)
   end
 
   private
+
+  def find_protocols(org_ids, org_type)
+    binding.pry
+    orgs = Organization.find([org_ids])
+    orgs_with_children = orgs.map(&:all_child_organizations).flatten + orgs.flatten
+    org_protocols = orgs_with_children.map(&:protocols).flatten
+    current_identity.protocols.select{|protocol| org_protocols.include?(protocol)}
+  end
 
   def find_documentable
     if params[:documentable_id].present? && params[:documentable_type].present?
