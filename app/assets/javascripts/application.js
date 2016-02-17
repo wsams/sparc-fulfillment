@@ -12,6 +12,7 @@
 
 //= require bootstrap-table-export
 //= require bootstrap-table-custom
+//= require bootstrap-table-cookie
 //= require tableExport
 //= require jquery.base64
 //= require moment
@@ -39,3 +40,4 @@
 //= require ajax_progress_bar
 //= require procedure_grouper
 //= require faye
+

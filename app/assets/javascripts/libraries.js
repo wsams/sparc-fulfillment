@@ -7,4 +7,3 @@
 //= require bootstrap-select
 //= require bootstrap-table
 //= require jquery.cookie
-//= require bootstrap-table-cookie
