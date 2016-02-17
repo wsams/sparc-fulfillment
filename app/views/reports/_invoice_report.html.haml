@@ -26,7 +26,7 @@
             .form-group
               = label_tag "institution", t(:reports)[:institution], class: "col-sm-3 control-label"
               .col-sm-9
-                = select_tag "institution", options_from_collection_for_select(@institutions, "id", "name"), include_blank: "Select An Institution", 'data-live-search' => true, class: "selectpicker form-control", id: "institution_select"
+                = select_tag "institution", options_from_collection_for_select(@institutions, "id", "name"), multiple: true, include_blank: "Select An Institution", 'data-live-search' => true, class: "selectpicker form-control", id: "institution_select"
             .form-group{style: 'display:none'}
               = label_tag "provider", t(:reports)[:provider], class: "col-sm-3 control-label"
               .col-sm-9#provider_section

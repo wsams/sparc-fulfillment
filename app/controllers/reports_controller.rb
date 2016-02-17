@@ -24,18 +24,23 @@ class ReportsController < ApplicationController
   end
 
   def update_dropdown
-    @org_type = params[:org_type]
-    @org_id = params[:org_id]
-    @organizations = current_identity.organization_lookup(@org_type)
-    @protocols = find_protocols(@org_id, @org_type)
+    if params[:org_type]
+      @org_type = params[:org_type]
+      @organizations = current_identity.organization_lookup(@org_type)
+      puts "******"
+      puts @org_type
+      puts @organizations.size()
+    end
+    @protocols = find_protocols(params[:org_ids])
+    puts "^^^^^"
+    puts @protocols.size()
   end
 
   private
 
-  def find_protocols(org_ids, org_type)
-    binding.pry
-    orgs = Organization.find([org_ids])
-    orgs_with_children = orgs.map(&:all_child_organizations).flatten + orgs.flatten
+  def find_protocols(org_ids)
+    orgs = Array.wrap(Organization.find(org_ids))
+    orgs_with_children = orgs.map{|x| x.all_child_organizations(true)}.flatten + orgs.flatten
     org_protocols = orgs_with_children.map(&:protocols).flatten
     current_identity.protocols.select{|protocol| org_protocols.include?(protocol)}
   end

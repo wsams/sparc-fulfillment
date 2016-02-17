@@ -12,6 +12,14 @@ class Organization < ActiveRecord::Base
             -> { where(process_ssrs: false) },
             class_name: "Organization",
             foreign_key: :parent_id
+  has_many :children, class_name: "Organization", foreign_key: :parent_id
+
+  # org_id = current_identity.clinical_providers.map{|org| org.organization_id}
+# org_id.map{|id| Organization.where(type: "Core").where(parent_id: id)}
+
+  scope :provider, -> (institution_id) {
+    where(type: "Provider").where(parent_id: institution_id)
+  }
 
   # Returns this organization's pricing setup that is effective on a given date.
   def effective_pricing_setup_for_date(date=Date.today)
@@ -47,11 +55,18 @@ class Organization < ActiveRecord::Base
     parents
   end
 
-  def all_child_organizations
-    [
-      non_process_ssrs_children,
-      non_process_ssrs_children.map(&:all_child_organizations)
-    ].flatten
+  def  (include_process_ssr=false)
+    if include_process_ssr
+      [
+        children,
+        children.map{|org| org.all_child_organizations(true)}
+      ].flatten
+    else
+      [
+        non_process_ssrs_children,
+        non_process_ssrs_children.map(&:all_child_organizations)
+      ].flatten
+    end
   end
 
   def all_child_services(scope)

@@ -15,6 +15,7 @@ class Identity < ActiveRecord::Base
 
   delegate :tasks_count, :unaccessed_documents_count, to: :identity_counter
 
+
   def protocols
     protocols = []
     if clinical_providers.any?
@@ -59,7 +60,6 @@ class Identity < ActiveRecord::Base
     orgs = []
 
     self.clinical_providers.map(&:organization).each do |org|
-      orgs << org.parents
       orgs << org
       orgs << org.all_child_organizations
     end
