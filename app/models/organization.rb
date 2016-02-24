@@ -38,11 +38,14 @@ class Organization < ActiveRecord::Base
       sort_by(&:name)
   end
 
-  def all_child_organizations
-    [
-      children,
-      children.map(&:all_child_organizations)
-    ].flatten
+  def all_child_organizations(orgs_with_protocols = false)
+    if orgs_with_protocols
+      
+    else
+      [
+        children,
+        children.map(&:all_child_organizations)
+      ].flatten
   end
 
   def all_child_services(scope)

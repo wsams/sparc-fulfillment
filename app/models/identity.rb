@@ -53,8 +53,8 @@ class Identity < ActiveRecord::Base
     orgs = []
 
     self.super_users.map(&:organization).each do |org|
-      orgs << org
-      orgs << org.all_child_organizations
+      orgs << org if org.protocols.any?
+      orgs << org.all_child_organizations(true)
     end
 
     orgs.flatten.uniq
