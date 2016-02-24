@@ -66,6 +66,7 @@ class ReportsController < ApplicationController
               :title,
               :start_date,
               :end_date,
+              :time_zone,
               :protocol_id,
               :participant_id,
               :documentable_id,
