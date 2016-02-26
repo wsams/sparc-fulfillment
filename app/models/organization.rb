@@ -40,12 +40,19 @@ class Organization < ActiveRecord::Base
 
   def all_child_organizations(orgs_with_protocols = false)
     if orgs_with_protocols
-      
+
+      [
+        # orgs_with_children = orgs.map{|x| x.all_child_organizations(true)}.flatten + orgs.flatten
+        # org_protocols = orgs_with_children.map(&:protocols).flatten
+        # current_identity.protocols.select{|protocol| org_protocols.include?(protocol)}
+        children,
+        ].flatten
     else
       [
         children,
         children.map(&:all_child_organizations)
       ].flatten
+    end
   end
 
   def all_child_services(scope)
