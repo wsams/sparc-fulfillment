@@ -3,15 +3,16 @@ $("#modal_place").modal('show')
 $('#start_date').datetimepicker(format: 'MM-DD-YYYY')
 $('#end_date').datetimepicker(format: 'MM-DD-YYYY')
 $(".modal-content .selectpicker").selectpicker()
-update_organization_dropdown = (org_type, org_ids) ->
-  data = {org_type: org_type, org_ids: org_ids}
+update_organization_dropdown = (org_ids) ->
+  data = { org_ids: org_ids }
   $.ajax
     url: '/reports/update_dropdown'
     data: data
     dataType: "script"
 $ ->
-	$('select#institution_select').on 'change', ->
-    update_organization_dropdown("Provider", $(this).val())
+	$('select#organization_select').on 'change', ->
+    console.log($(this).val())
+    update_organization_dropdown($(this).val())
   
 
 	# $('#institution_select').on 'change', ->

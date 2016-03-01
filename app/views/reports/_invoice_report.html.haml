@@ -24,26 +24,28 @@
               .col-sm-9
                 = text_field_tag "end_date", nil, class: "datepicker form-control"
             .form-group
-              = label_tag "institution", t(:reports)[:institution], class: "col-sm-3 control-label"
+              = label_tag "organization", t(:reports)[:organization], class: "col-sm-3 control-label"
               .col-sm-9
-                = select_tag "institution", options_from_collection_for_select(@institutions, "id", "name"), multiple: true, include_blank: "Select An Institution", 'data-live-search' => true, class: "selectpicker form-control", id: "institution_select"
-            .form-group{style: 'display:none'}
-              = label_tag "provider", t(:reports)[:provider], class: "col-sm-3 control-label"
-              .col-sm-9#provider_section
-            /     = select_tag "provider", options_from_collection_for_select(@providers, "id", "name"), include_blank: "Select A Provider", 'data-live-search' => true, class: "selectpicker form-control", id: "provider_select"
-            .form-group{style: 'display:none'}
-              = label_tag "program", t(:reports)[:program], class: "col-sm-3 control-label"
-              .col-sm-9#program_section
-            /     = select_tag "program", options_from_collection_for_select(@programs, "id", "name"), include_blank: "Select A Program", 'data-live-search' => true, class: "selectpicker form-control", id: "program_select"
-            .form-group{style: 'display:none'}
-              = label_tag "core", t(:reports)[:core], class: "col-sm-3 control-label"
-              .col-sm-9#core_section
+                = select_tag 'organization', grouped_options_for_select(@grouped_options), multiple: true, include_blank: "Select An Organization", 'data-live-search' => true, class: "selectpicker form-control", id: "organization_select"
+                / = select_tag "institution", option_groups_from_collection_for_select( @organizations, :name, :type, :id, :name), multiple: true, include_blank: "Select An Organization", 'data-live-search' => true, class: "selectpicker form-control", id: "institution_select"
+
+            / .form-group{style: 'display:none'}
+            /   = label_tag "provider", t(:reports)[:provider], class: "col-sm-3 control-label"
+            /   .col-sm-9#provider_section
+            / /     = select_tag "provider", options_from_collection_for_select(@providers, "id", "name"), include_blank: "Select A Provider", 'data-live-search' => true, class: "selectpicker form-control", id: "provider_select"
+            / .form-group{style: 'display:none'}
+            /   = label_tag "program", t(:reports)[:program], class: "col-sm-3 control-label"
+            /   .col-sm-9#program_section
+            / /     = select_tag "program", options_from_collection_for_select(@programs, "id", "name"), include_blank: "Select A Program", 'data-live-search' => true, class: "selectpicker form-control", id: "program_select"
+            / .form-group{style: 'display:none'}
+            /   = label_tag "core", t(:reports)[:core], class: "col-sm-3 control-label"
+            /   .col-sm-9#core_section
             .form-group
               = label_tag "protocol", t(:reports)[:protocols], class: "col-sm-3 control-label"
               .col-sm-9#protocol_section
-                = select_tag "protocol_ids", options_from_collection_for_select(@protocols, "id", "short_title_with_sparc_id"), multiple: true, 'data-live-search' => true, class: "selectpicker form-control", id: "protocol_select"
-              .col-sm-9.col-sm-offset-3
-                %p= t(:reports)[:protocol_instructions]
+            /     = select_tag "protocol_ids", options_from_collection_for_select(@protocols, "id", "short_title_with_sparc_id"), multiple: true, 'data-live-search' => true, class: "selectpicker form-control", id: "protocol_select"
+            /   .col-sm-9.col-sm-offset-3
+            /     %p= t(:reports)[:protocol_instructions]
       .modal-footer
         .center-block
           %button.btn.btn-default{type: 'button', data: {dismiss: 'modal'}}= t(:actions)[:close]

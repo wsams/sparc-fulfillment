@@ -14,6 +14,10 @@ class Organization < ActiveRecord::Base
             foreign_key: :parent_id
   has_many :children, class_name: "Organization", foreign_key: :parent_id
 
+  # Experimental
+  # has_one :type
+
+
   # Returns this organization's pricing setup that is effective on a given date.
   def effective_pricing_setup_for_date(date=Date.today)
     if self.pricing_setups.blank?
@@ -39,14 +43,15 @@ class Organization < ActiveRecord::Base
   end
 
   def all_child_organizations(orgs_with_protocols = false)
+    orgs = []
     if orgs_with_protocols
-
-      [
-        # orgs_with_children = orgs.map{|x| x.all_child_organizations(true)}.flatten + orgs.flatten
-        # org_protocols = orgs_with_children.map(&:protocols).flatten
-        # current_identity.protocols.select{|protocol| org_protocols.include?(protocol)}
-        children,
-        ].flatten
+      children.each do |child|
+        orgs << child if child.protocols.any?
+      end
+      children.map(&:all_child_organizations).flatten.each do |all_child|
+        orgs << all_child unless all_child.protocols.empty?
+      end
+      return orgs.flatten
     else
       [
         children,
