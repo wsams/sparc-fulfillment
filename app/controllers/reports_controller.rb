@@ -26,21 +26,49 @@ class ReportsController < ApplicationController
     core_names = cores.map(&:name)
     core_ids = cores.map(&:id)
 
-    
+    @grouped_options = []
 
-    @grouped_options = [
-      ['Institutions',
-        organization_name_id_to_array(institution_names, institution_ids)],
-      ['Providers',
-        organization_name_id_to_array(provider_names, provider_ids)],
-      ['Programs',
-        organization_name_id_to_array(program_names, program_ids)],
-      ['Cores',
-        organization_name_id_to_array(core_names, core_ids)]
-    ]
-    
+    institution_array = ['Institutions', institutions.map { |institution| [institution.name, institution.id] }] unless institutions.empty?
+    provider_array = ['Providers', providers.map { |provider| [provider.name, provider.id] }] unless providers.empty?
+    program_array = ['Programs', programs.map { |program| [program.name, program.id] }] unless programs.empty?
+    core_array = ['Cores', cores.map { |core| [core.name, core.id] }] unless cores.empty?
+
+    add_array_to_grouped_options(institution_array)
+    add_array_to_grouped_options(provider_array)
+    add_array_to_grouped_options(program_array)
+    add_array_to_grouped_options(core_array)
+
+
+    # @grouped_options = [
+    #   ,
+    #   ['Providers',
+    #     providers.map { |provider| [provider.name, provider.id] }],
+    #   ['Programs',
+    #     programs.map { |program| [program.name, program.id] }],
+    #   ['Cores',
+    #     cores.map { |core| [core.name, core.id] }]
+    # ]
+
+    # @grouped_options2 = [
+    #   ['Institutions',
+    #     institutions.collect { |institution| [institution.name, institution.id] }],
+    #   ['Providers',
+    #     providers.collect { |provider| [provider.name, provider.id] }],
+    #   ['Programs',
+    #     programs.collect { |program| [program.name, program.id] }],
+    #   ['Cores',
+    #     cores.collect { |core| [core.name, core.id] }]
+    # ]
+    puts "*********"
+    puts @grouped_options.inspect
+    # puts "*********"
+    # puts @grouped_options2.inspect
 
     # @organizations = current_identity.fulfillment_organizations
+  end
+
+  def add_array_to_grouped_options(array)
+    @grouped_options << array unless array.nil?
   end
 
   def create

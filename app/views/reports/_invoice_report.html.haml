@@ -26,7 +26,9 @@
             .form-group
               = label_tag "organization", t(:reports)[:organization], class: "col-sm-3 control-label"
               .col-sm-9
-                = select_tag 'organization', grouped_options_for_select(@grouped_options), multiple: true, include_blank: "Select An Organization", 'data-live-search' => true, class: "selectpicker form-control", id: "organization_select"
+                / = hidden_field_tag "core_names", @core_names
+                / = hidden_field_tag "core_ids", @core_ids
+                = select_tag 'organization', grouped_options_for_select(@grouped_options), multiple: true,'data-live-search' => true, 'data-actions-box' => true, title: 'Select All', class: "selectpicker form-control", id: "organization_select"
                 / = select_tag "institution", option_groups_from_collection_for_select( @organizations, :name, :type, :id, :name), multiple: true, include_blank: "Select An Organization", 'data-live-search' => true, class: "selectpicker form-control", id: "institution_select"
 
             / .form-group{style: 'display:none'}
