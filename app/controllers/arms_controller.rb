@@ -15,13 +15,7 @@ class ArmsController < ApplicationController
     @arm_visit_group_creator  = ArmVisitGroupsImporter.new(@arm)
     services = params[:services] || []
     if @arm_visit_group_creator.save_and_create_dependents
-      services.each do |service|
-        line_item = LineItem.new(protocol_id: @arm.protocol_id, arm_id: @arm.id, service_id: service, subject_count: @arm.subject_count)
-        importer = LineItemVisitsImporter.new(line_item)
-        importer.save_and_create_dependents
-      end
-      flash.now[:success] = t(:arm)[:created]
-      @schedule_tab = params[:schedule_tab]
+      create_arm(@arm, services)
     else
       @errors = @arm_visit_group_creator.arm.errors
     end
