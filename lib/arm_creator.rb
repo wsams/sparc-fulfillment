@@ -1,7 +1,7 @@
 class ArmCreator
   def initialize(arm, services)
     @arm = arm
-    @services = services
+    @services = services || []
   end
 
   def build_line_item
