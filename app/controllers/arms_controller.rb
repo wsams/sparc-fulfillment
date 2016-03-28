@@ -54,7 +54,7 @@ class ArmsController < ApplicationController
 
   def build_line_item(arm, services)
     services.each do |service|
-      line_item = LineItem.new(protocol_id: @arm.protocol_id, arm_id: @arm.id, service_id: service, subject_count: @arm.subject_count)
+      line_item = LineItem.new(protocol_id: arm.protocol_id, arm_id: arm.id, service_id: service, subject_count: arm.subject_count)
       importer = LineItemVisitsImporter.new(line_item)
       importer.save_and_create_dependents
     end
