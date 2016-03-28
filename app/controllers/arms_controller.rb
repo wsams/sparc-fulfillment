@@ -52,6 +52,28 @@ class ArmsController < ApplicationController
 
   private
 
+  def build_line_item(arm, services)
+    services.each do |service|
+      line_item = LineItem.new(protocol_id: @arm.protocol_id, arm_id: @arm.id, service_id: service, subject_count: @arm.subject_count)
+      importer = LineItemVisitsImporter.new(line_item)
+      importer.save_and_create_dependents
+    end
+  end
+
+  def schedule_tab
+    @schedule_tab = params[:schedule_tab]
+  end
+
+  def flash_success
+    flash.now[:success] = t(:arm)[:created]
+  end
+
+  def create_arm(arm, services)
+    build_line_item(arm, services)
+    flash_success
+    schedule_tab
+  end
+
   def arm_params
     params.require(:arm).permit(:protocol_id, :name, :visit_count, :subject_count)
   end
