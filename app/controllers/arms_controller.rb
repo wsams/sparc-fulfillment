@@ -13,8 +13,7 @@ class ArmsController < ApplicationController
   def create
     @arm                      = Arm.new(arm_params)
     @arm_visit_group_creator  = ArmVisitGroupsImporter.new(@arm)
-    services = params[:services] || []
-    arm_creator = ArmCreator.new(@arm, services)
+    arm_creator = ArmCreator.new(@arm, params[:services])
     if @arm_visit_group_creator.save_and_create_dependents
       arm_creator.create_arm
       set_schedule_tab_and_flash_success
