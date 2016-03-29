@@ -12,13 +12,13 @@ class ArmsController < ApplicationController
 
   def create
     @arm = Arm.new(arm_params)
-    @arm_visit_group_creator = ArmVisitGroupsImporter.new(@arm)
-    arm_creator = ArmCreator.new(@arm, params[:services])
-    if @arm_visit_group_creator.save_and_create_dependents
-      arm_creator.create_arm
+    arm_visit_group_creator = ArmVisitGroupsImporter.new(@arm)
+    setup_line_item = SetupLineItem.new(@arm, params[:services])
+    if arm_visit_group_creator.save_and_create_dependents
+      setup_line_item.create_line_item
       set_schedule_tab_and_flash_success
     else
-      @errors = @arm_visit_group_creator.arm.errors
+      @errors = arm_visit_group_creator.arm.errors
     end
   end
 
