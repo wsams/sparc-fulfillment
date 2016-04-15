@@ -5,9 +5,10 @@ RSpec.describe FayeJob, type: :job, delay: true do
   describe '#enqueue' do
 
     it 'should create a delayed_job', delay: true do
-      create(:protocol)
+      ActiveJob::Base.queue_adapter.perform_enqueued_jobs = false
+      Protocol.create()
 
-      expect(Delayed::Job.where(queue: 'faye').count).to eq(1)
+      expect(ActiveJob::Base.queue_adapter.enqueued_jobs.size).to eq(1)
     end
   end
 
@@ -16,9 +17,7 @@ RSpec.describe FayeJob, type: :job, delay: true do
     context 'Protocol#save' do
 
       before do
-        @protocol = create(:protocol)
-
-        work_off
+        @protocol = Protocol.create()
       end
 
       it "should POST to the Faye server on the 'protocols' channel" do
@@ -33,13 +32,8 @@ RSpec.describe FayeJob, type: :job, delay: true do
     context 'Particpant#save' do
 
       before do
-        @protocol = create(:protocol)
-
-        destroy_all_delayed_jobs
-
+        @protocol = Protocol.create()
         create(:participant, protocol: @protocol)
-
-        work_off
       end
 
       it "should POST to the Faye server on the 'protocols' channel" do
