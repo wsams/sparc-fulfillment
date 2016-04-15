@@ -37,11 +37,11 @@ RSpec.describe FayeJob, type: :job, delay: true do
       end
 
       it "should POST to the Faye server on the 'protocols' channel" do
-        expect(a_request(:post, /#{ENV['CWF_FAYE_HOST']}/).with{ |request| request.body.match(/protocols/) }).to have_been_made.once
+        expect(a_request(:post, /#{ENV['CWF_FAYE_HOST']}/).with{ |request| request.body.match(/protocols/) }).to have_been_made.twice
       end
 
       it "should POST to the Faye server on the 'protocol_id' channel" do
-        expect(a_request(:post, /#{ENV['CWF_FAYE_HOST']}/).with { |request| request.body.match(/protocol_#{@protocol.id}/) }).to have_been_made.once
+        expect(a_request(:post, /#{ENV['CWF_FAYE_HOST']}/).with { |request| request.body.match(/protocol_#{@protocol.id}/) }).to have_been_made.twice
       end
     end
   end
