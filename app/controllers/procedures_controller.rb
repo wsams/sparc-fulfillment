@@ -2,7 +2,6 @@ class ProceduresController < ApplicationController
 
   before_action :find_procedure, only: [:edit, :update, :destroy]
   before_action :save_original_procedure_status, only: [:update]
-  before_action :create_note_before_update, only: [:update]
 
   def create
     @appointment = Appointment.find params[:appointment_id]
@@ -34,6 +33,7 @@ class ProceduresController < ApplicationController
   end
 
   def update
+    NoteCreator.new([@procedure], params, current_identity, @original_procedure_status).create_note_before_update
     @procedure.update_attributes(procedure_params)
     @appointment = @procedure.appointment
     @statuses = @appointment.appointment_statuses.map{|x| x.status}
@@ -47,56 +47,6 @@ class ProceduresController < ApplicationController
 
   def save_original_procedure_status
     @original_procedure_status = @procedure.status
-  end
-
-  def create_note_before_update
-    if reset_status_detected?
-      @procedure.notes.create(identity: current_identity,
-                              comment: 'Status reset',
-                              kind: 'log')
-    elsif incomplete_status_detected?
-      @procedure.notes.create(identity: current_identity,
-                              comment: 'Status set to incomplete',
-                              kind: 'log')
-    elsif change_in_completed_date_detected?
-      @procedure.notes.create(identity: current_identity,
-                              comment: "Completed date updated to #{procedure_params[:completed_date]} ",
-                              kind: 'log')
-    elsif complete_status_detected?
-      @procedure.notes.create(identity: current_identity,
-                              comment: 'Status set to complete',
-                              kind: 'log')
-    elsif change_in_performer_detected?
-      new_performer = Identity.find(procedure_params[:performer_id])
-
-      @procedure.notes.create(identity: current_identity,
-                              comment: "Performer changed to #{new_performer.full_name}",
-                              kind: 'log')
-    end
-  end
-
-  def change_in_completed_date_detected?
-    if procedure_params[:completed_date]
-      Time.strptime(procedure_params[:completed_date], "%m/%d/%Y") != @procedure.completed_date
-    else
-      return false
-    end
-  end
-
-  def reset_status_detected?
-    procedure_params[:status] == "unstarted"
-  end
-
-  def incomplete_status_detected?
-    procedure_params[:status] == "incomplete"
-  end
-
-  def complete_status_detected?
-    @original_procedure_status != "complete" && procedure_params[:status] == "complete"
-  end
-
-  def change_in_performer_detected?
-    procedure_params[:performer_id].present? && procedure_params[:performer_id] != @procedure.performer_id
   end
 
   def procedure_params

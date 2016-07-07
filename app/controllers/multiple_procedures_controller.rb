@@ -1,7 +1,7 @@
 class MultipleProceduresController < ApplicationController
 
   before_action :find_procedures, only: [:complete_all, :incomplete_all, :update_procedures]
-  before_action :create_note_before_update, only: [:update_procedures]
+  before_action :save_original_procedure_status, only: [:update_procedures]
 
   def complete_all
     @procedure_ids = params[:procedure_ids]
@@ -12,20 +12,19 @@ class MultipleProceduresController < ApplicationController
   end
 
   def update_procedures
+    NoteCreator.new(@procedures, params, current_identity, @original_procedure_status).create_note_before_update
     @core_id = @procedures.first.sparc_core_id
     status = params[:status]
 
     if status == 'incomplete'
       #Create test note for validation.
-      @note = Note.new(kind: 'reason', reason: params[:reason], notable_type: 'Procedure')
+      # @note = Note.new(kind: 'reason', reason: params[:reason], notable_type: 'Procedure')
 
-      if @note.valid?
+      # if @note.valid?
         #Now update all @procedures with incomplete status and create notes.
-        @performed_by = params[:performed_by]
-        @procedures.each do |procedure|
-          procedure.update_attributes(status: "incomplete", performer_id: @performed_by)
-          procedure.notes.create(identity_id: @performed_by, kind: 'reason', reason: params[:reason], comment: params[:comment])
-        end
+      @performed_by = params[:performed_by]
+      @procedures.each do |procedure|
+        procedure.update_attributes(status: "incomplete", performer_id: @performed_by)
       end
     elsif status == 'complete'
       #Mark all @procedures as complete.
@@ -58,62 +57,10 @@ class MultipleProceduresController < ApplicationController
     @procedures = Procedure.where(id: params[:procedure_ids])
   end
 
-  def create_note_before_update
-    if reset_status_detected?
-      @procedures.each do |procedure|
-        procedure.notes.create(identity: current_identity,
-                                comment: 'Status reset',
-                                kind: 'log')
-      end
-    elsif incomplete_status_detected?
-      @procedures.each do |procedure|
-        procedure.notes.create(identity: current_identity,
-                                comment: 'Status set to incomplete',
-                                kind: 'log')
-      end
-    elsif change_in_completed_date_detected?
-      @procedures.each do |procedure|
-        procedure.notes.create(identity: current_identity,
-                                comment: "Completed date updated to #{params[:completed_date]} ",
-                                kind: 'log')
-      end
-    elsif complete_status_detected?
-      @procedures.each do |procedure|
-        procedure.notes.create(identity: current_identity,
-                                comment: 'Status set to complete',
-                                kind: 'log')
-      end
-    elsif change_in_performer_detected?
-      new_performer = Identity.find(params[:performed_by])
-      @procedures.each do |procedure|
-        procedure.notes.create(identity: current_identity,
-                                comment: "Performer changed to #{new_performer.full_name}",
-                                kind: 'log')
-      end
+  def save_original_procedure_status
+    @original_procedure_status = []
+    @procedures.each do |procedure|
+      @original_procedure_status << procedure.status
     end
-  end
-
-  def change_in_completed_date_detected?
-    if params[:completed_date]
-      Time.strptime(params[:completed_date], "%m/%d/%Y") != @procedures.first.completed_date
-    else
-      return false
-    end
-  end
-
-  def reset_status_detected?
-    params[:status] == "unstarted"
-  end
-
-  def incomplete_status_detected?
-    params[:status] == "incomplete"
-  end
-
-  def complete_status_detected?
-    @original_procedure_status != "complete" && params[:status] == "complete"
-  end
-
-  def change_in_performer_detected?
-    params[:performed_by].present? && params[:performed_by] != @procedures.first.performer_id
   end
 end
