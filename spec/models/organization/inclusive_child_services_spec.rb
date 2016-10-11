@@ -30,8 +30,7 @@ RSpec.describe Organization, type: :model do
         organization  = create(:organization_with_services)
         child_1       = create(:organization_with_services, parent: organization)
         child_2       = create(:organization_with_services, parent: organization, process_ssrs: true)
-
-        expect(organization.inclusive_child_services(:per_participant).length).to eq(8)
+        expect(organization.reload.inclusive_child_services(:per_participant).length).to eq(8)
       end
 
       it "should only return Services of Organizations which are not process_ssrs" do
@@ -39,7 +38,7 @@ RSpec.describe Organization, type: :model do
         child_1       = create(:organization_with_services, parent: organization)
         child_2       = create(:organization_with_services, parent: child_1, process_ssrs: true)
 
-        expect(organization.inclusive_child_services(:per_participant).length).to eq(8)
+        expect(organization.reload.inclusive_child_services(:per_participant).length).to eq(8)
       end
     end
 
@@ -47,7 +46,10 @@ RSpec.describe Organization, type: :model do
 
       context "Services present" do
 
-        before { @organization = create(:organization_with_child_organizations) }
+        before do
+          @organization = create(:organization_with_child_organizations)
+          @organization.reload
+        end
 
         after { Service.destroy_all }
 

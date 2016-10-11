@@ -297,6 +297,7 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rake (11.1.2)
+    rb-readline (0.5.3)
     rdoc (4.2.0)
       json (~> 1.4)
     ref (1.0.5)
@@ -459,6 +460,7 @@ DEPENDENCIES
   puma
   rack-mini-profiler
   rails (= 4.2.2)
+  rb-readline
   remotipart
   rest-client
   rspec-activejob (~> 0.4.0)
@@ -482,3 +484,6 @@ DEPENDENCIES
   webmock (~> 1.20.4)
   will_paginate
   yajl-ruby (~> 1.2.1)
+
+BUNDLED WITH
+   1.11.2

@@ -26,7 +26,6 @@ RSpec.describe Organization, type: :model do
   it { is_expected.to have_many(:sub_service_requests) }
   it { is_expected.to have_many(:protocols) }
   it { is_expected.to have_many(:pricing_setups) }
-  it { is_expected.to have_many(:non_process_ssrs_children) }
   it { is_expected.to have_many(:super_users) }
   it { is_expected.to have_many(:clinical_providers) }
   it { is_expected.to have_many(:children) }
@@ -40,7 +39,10 @@ RSpec.describe Organization, type: :model do
         @provider_organization = create(:organization_provider, children_count: 2, parent_id: @institution_organization.id )
         # Creates a program organization whose parent is provider_organization who has n = 2 core children
         @program_organization = create(:organization_program, children_count: 2, parent_id: @provider_organization.id )
-      end 
+        @institution_organization.reload
+        @provider_organization.reload
+        @program_organization.reload
+      end
 
       it "should return all child organizations for institution" do
         institution_organization_children_ids = [
@@ -85,16 +87,18 @@ RSpec.describe Organization, type: :model do
         @provider_organization = create(:organization_provider, children_count: 2, parent_id: @institution_organization.id, has_protocols: true)
         # Creates a program organization whose parent is provider_organization who has n = 2 core children with protocols
         @program_organization = create(:organization_program, children_count: 2, parent_id: @provider_organization.id, has_protocols: true )
-      end 
+        @institution_organization.reload
+        @provider_organization.reload
+        @program_organization.reload
+      end
 
       it "should return all child organizations for institution with protocols" do
-        
         institution_organization_children_ids = []
         @institution_organization.children.map { |child| institution_organization_children_ids << child.id if child.protocols.any? }
         @provider_organization.children.map { |child| institution_organization_children_ids << child.id if child.protocols.any? }
         @program_organization.children.map { |child| institution_organization_children_ids << child.id if child.protocols.any? }
 
-        institution_organization_children_ids.compact.flatten                               
+        institution_organization_children_ids.compact.flatten
 
         expect(@institution_organization.child_orgs_with_protocols.map(&:id).sort).to eq(institution_organization_children_ids)
       end
@@ -103,7 +107,7 @@ RSpec.describe Organization, type: :model do
         provider_organization_children_ids = []
         @provider_organization.children.map { |child| provider_organization_children_ids << child.id if child.protocols.any? }
         @program_organization.children.map { |child| provider_organization_children_ids << child.id if child.protocols.any? }
-        
+
 
         expect(@provider_organization.child_orgs_with_protocols.map(&:id).sort).to eq(provider_organization_children_ids)
       end

@@ -22,6 +22,8 @@ class Organization < ActiveRecord::Base
 
   include SparcShard
 
+  before_save :compute_lft_and_rgt
+
   belongs_to :parent, class_name: "Organization"
 
   has_many :services,
@@ -29,10 +31,6 @@ class Organization < ActiveRecord::Base
   has_many :sub_service_requests
   has_many :protocols, through: :sub_service_requests
   has_many :pricing_setups
-  has_many :non_process_ssrs_children,
-            -> { where(process_ssrs: false) },
-            class_name: "Organization",
-            foreign_key: :parent_id
   has_many :super_users
   has_many :clinical_providers
 
@@ -55,40 +53,37 @@ class Organization < ActiveRecord::Base
   end
 
   def inclusive_child_services(scope)
-    services.
+    Service.
       send(scope).
-      push(all_child_services(scope)).
-      flatten.
-      sort_by(&:name)
+      joins(:organization).
+      where("(process_ssrs = 0 AND organizations.lft > ? AND organizations.rgt < ?) OR (organizations.id = ?)", lft, rgt, id).
+      order(:name)
   end
 
   def all_child_organizations
-    [
-      children,
-      children.map(&:all_child_organizations)
-    ].flatten
+    Organization.where("lft > ? AND rgt < ?", lft, rgt).
+      order(lft: :asc)
   end
 
   def child_orgs_with_protocols
-    organizations = all_child_organizations
-    organizations_with_protocols = []
-    organizations.flatten.uniq.each do |organization|
-      if organization.protocols.any?
-        organizations_with_protocols << organization
+    all_child_organizations.joins(:protocols).distinct
+  end
+
+  private
+
+  def compute_lft_and_rgt
+    if parent_id_changed? || !id
+      new_parent = Organization.find_by(id: parent_id)
+      if new_parent
+        self.lft = new_parent.rgt
+        self.rgt = self.lft + 1
+        Organization.where('rgt >= ?', self.lft).update_all('rgt = rgt + 2')
+        Organization.where('lft > ?', self.lft).update_all('lft = lft + 2')
+      else
+        last_rgt = Organization.maximum(:rgt) || 0
+        self.lft = last_rgt + 1
+        self.rgt = self.lft + 1
       end
     end
-    organizations_with_protocols.flatten.uniq
-  end
-
-  # NOT SURE WHAT THIS IS TRYING TO ACCOMPLISH
-  def all_child_organizations_with_non_process_ssrs
-    [
-      non_process_ssrs_children,
-      non_process_ssrs_children.map(&:all_child_organizations_with_non_process_ssrs)
-    ].flatten
-  end
-
-  def all_child_services(scope)
-    all_child_organizations_with_non_process_ssrs.map { |child| child.services.send(scope) }
   end
 end
