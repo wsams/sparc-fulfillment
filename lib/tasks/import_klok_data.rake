@@ -59,7 +59,7 @@ task import_klok: :environment do
 
           if entry['enabled'] == 'false'  # only solution for duplicate entries with same entry_id
             if dup_entry_header
-              csv << ['', 'Duplicate entries'] + entry.keys
+              csv << ['ssr_id', 'Duplicate entries'] + entry.keys
               dup_entry_header = false
             end
 
