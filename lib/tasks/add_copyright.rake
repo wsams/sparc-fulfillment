@@ -20,7 +20,7 @@
 
 task update_copyright: :environment do
   Dir.glob(Rails.root + '**/*{.rb,.haml,.coffee,.example,.rake,.ru,.js,.erb,.scss,.sass,.css}') do |file|
-    header = "# Copyright © 2011-2016 MUSC Foundation for Research Development~\n"
+    header = "# Copyright © 2011-2017 MUSC Foundation for Research Development~\n"
     header += "# All rights reserved.~\n\n"
     header += "# Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:~\n\n"
     header += "# 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.~\n\n"
